@@ -7,6 +7,7 @@ namespace Simtabi\SIS\Tests\Profile;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Simtabi\SIS\Exception\ScopeMismatchException;
+use Simtabi\SIS\Profile\SerialRules;
 use Simtabi\SIS\Profile\SisProfile;
 use Simtabi\SIS\Sis;
 use Simtabi\SIS\Support\CheckCharacters;
@@ -95,5 +96,20 @@ final class CustomProfileTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         SisProfile::builder()->issuer('ACME')->class('CUST')->class('CUST')->build();
+    }
+
+    public function test_builder_rejects_a_default_width_outside_the_band(): void
+    {
+        // A self-inconsistent band (default below the minimum) must fail fast at BUILD time with the real
+        // cause — not silently build and then throw a misleading MalformedIdentifierException on every mint,
+        // when the codec re-parses a serial padded to a width the grammar band rejects.
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Serial default width 6 is outside the profile band [7, 9]');
+
+        SisProfile::builder()
+            ->issuer('ACME')
+            ->class('CUST')
+            ->serials(new SerialRules(minWidth: 7, maxWidth: 9, defaultWidth: 6))
+            ->build();
     }
 }

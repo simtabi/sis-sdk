@@ -6,6 +6,14 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Fixed
+
+- `SisProfileBuilder::build()` now rejects a serial `defaultWidth` outside the configured
+  `[minWidth, maxWidth]` band with a descriptive `InvalidArgumentException`. Previously a
+  self-inconsistent profile (e.g. `min_width: 7, default_width: 6`) built without error, then threw a
+  misleading `MalformedIdentifierException` on every default-width mint when the codec re-parsed a serial
+  padded to a width the grammar band rejects. The failure now surfaces at build time with the real cause.
+
 ## [0.1.0] - 2026-07-13
 
 ### Added

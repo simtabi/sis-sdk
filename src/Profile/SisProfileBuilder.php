@@ -12,7 +12,7 @@ use Simtabi\SIS\Spec;
  * Fluent, validating builder for a `SisProfile`. Defaults are the SIM defaults, so a profile is a small
  * set of overrides: an issuer and a handful of `class()` calls is enough for a working register. `build()`
  * enforces the invariants the identifier grammar depends on — a non-empty issuer, unique three-letter
- * class codes, and a serial width band within the frozen 6–9 digits.
+ * class codes, a serial width band within the frozen 6–9 digits, and a default width inside that band.
  */
 final class SisProfileBuilder
 {
@@ -141,6 +141,20 @@ final class SisProfileBuilder
         if ($serials->minWidth < 6 || $serials->maxWidth > 9 || $serials->minWidth > $serials->maxWidth) {
             throw new InvalidArgumentException(
                 sprintf('Serial width band %d–%d is outside the permitted 6–9 digits.', $serials->minWidth, $serials->maxWidth),
+            );
+        }
+
+        // The default render width must itself sit inside the band. Otherwise every default-width mint pads
+        // to a width the grammar band rejects, and the codec throws a misleading MalformedIdentifierException
+        // when it re-parses its own output — so fail fast here with the real cause instead.
+        if ($serials->defaultWidth < $serials->minWidth || $serials->defaultWidth > $serials->maxWidth) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Serial default width %d is outside the profile band [%d, %d].',
+                    $serials->defaultWidth,
+                    $serials->minWidth,
+                    $serials->maxWidth,
+                ),
             );
         }
 
