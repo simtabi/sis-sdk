@@ -1,0 +1,60 @@
+{
+    "name": "simtabi/sis-sdk",
+    "description": "The Simtabi Identifier System SDK — a pure-PHP, zero-dependency, config-driven functional core: grammar, ISO 7064 check characters, a data-driven class register, the lifecycle state machine, alias derivation, and semver releases. Reference implementation of SIM-STD-0001:2026; SIM ships as the default profile.",
+    "type": "library",
+    "keywords": ["identifier", "iso-7064", "check-digit", "value-object", "sis", "specification", "sdk"],
+    "license": "MIT",
+    "homepage": "https://opensource.simtabi.com/products/simtabi/sis-sdk",
+    "authors": [
+        { "name": "Imani Manyara", "email": "imani@simtabi.com", "role": "Maintainer" }
+    ],
+    "support": {
+        "issues": "https://github.com/simtabi/sis-sdk/issues",
+        "source": "https://github.com/simtabi/sis-sdk",
+        "docs": "https://opensource.simtabi.com/documentation/simtabi/sis-sdk/"
+    },
+    "require": {
+        "php": "^8.5"
+    },
+    "require-dev": {
+        "deptrac/deptrac": "^3.0",
+        "laravel/pint": "^1.18",
+        "php-parallel-lint/php-parallel-lint": "^1.4",
+        "phpstan/phpstan": "^2.0",
+        "phpstan/phpstan-strict-rules": "^2.0",
+        "phpunit/phpunit": "^12.0"
+    },
+    "suggest": {
+        "ext-intl": "Best-quality alias transliteration (Any-Latin; Latin-ASCII). Without it, and without ext-iconv, transliteration falls back to raw ASCII.",
+        "ext-iconv": "Fallback alias transliteration when ext-intl is absent."
+    },
+    "autoload": {
+        "psr-4": { "Simtabi\\SIS\\": "src/" }
+    },
+    "autoload-dev": {
+        "psr-4": { "Simtabi\\SIS\\Tests\\": "tests/" }
+    },
+    "extra": {
+        "branch-alias": { "dev-main": "0.1.x-dev" }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    },
+    "scripts": {
+        "lint": "parallel-lint --exclude vendor src tests",
+        "pint": "pint --test",
+        "pint:fix": "pint",
+        "analyse": "phpstan analyse --memory-limit=512M",
+        "deptrac": "deptrac analyse --config-file=deptrac.yaml",
+        "test": "phpunit",
+        "quality": [
+            "@lint",
+            "@pint",
+            "@deptrac",
+            "@analyse",
+            "@test"
+        ]
+    }
+}

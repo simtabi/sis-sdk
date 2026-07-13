@@ -1,0 +1,77 @@
+# The boundary. A convention is not a boundary; this is. Gated in CI.
+#
+# The SDK is a library of total functions over immutable values. It may reference NOTHING outside
+# itself — no Illuminate, no Laranail, no framework. Layering inside the SDK is strictly
+# one-directional:
+#
+#   Value <- Policy <- Decider <- Entry
+#
+# (Testing may see everything; nothing may see the framework, because there is none.)
+deptrac:
+  paths:
+    - ./src
+
+  layers:
+    - name: Value
+      collectors:
+        - type: directory
+          value: src/(Enums|Identifier|Version|Support|Exception|Event|Profile|Grammar|Codec)/.*
+        # The pure value contracts. `DeciderInterface` and `SisEngine` live with their own layers below,
+        # because they name Decider-layer types (a Decision) that the Value layer may never depend on.
+        - type: directory
+          value: src/Contract/(Command|Snapshot|DomainEvent|Effect|SisException)\.php
+        - type: directory
+          value: src/Spec\.php
+
+    - name: Policy
+      collectors:
+        - type: directory
+          value: src/Policy/.*
+
+    - name: Decider
+      collectors:
+        - type: directory
+          value: src/(Command|Snapshot|Decision|Decider)/.*
+        - type: directory
+          value: src/Contract/DeciderInterface\.php
+
+    - name: Entry
+      collectors:
+        - type: directory
+          value: src/Sis\.php
+        - type: directory
+          value: src/Contract/SisEngine\.php
+
+    - name: Testing
+      collectors:
+        - type: directory
+          value: src/Testing/.*
+
+    # Framework tokens, defined only so the SDK can be forbidden from touching them.
+    - name: Illuminate
+      collectors:
+        - type: classNameRegex
+          value: '#^Illuminate\\#'
+
+    - name: Laranail
+      collectors:
+        - type: classNameRegex
+          value: '#^Simtabi\\Laranail\\#'
+
+  ruleset:
+    Value: ~
+    Policy:
+      - Value
+    Decider:
+      - Value
+      - Policy
+    Entry:
+      - Value
+      - Policy
+      - Decider
+    Testing:
+      - Value
+      - Policy
+      - Decider
+      - Entry
+    # Illuminate and Laranail intentionally have NO allowed dependents — any SDK reference is a violation.

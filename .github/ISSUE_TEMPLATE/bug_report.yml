@@ -1,0 +1,44 @@
+name: Bug report
+description: Report a defect in simtabi/sis-sdk.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filing a report. Do not include secrets or production identifiers. Suspected security
+        issues should go through SECURITY.md, not a public issue.
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: The tag or commit of simtabi/sis-sdk.
+      placeholder: v0.1.0
+    validations:
+      required: true
+  - type: input
+    id: php
+    attributes:
+      label: PHP version
+      placeholder: PHP 8.5.8
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+      description: Include the exact error or the identifier/profile that misbehaved.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: A minimal, self-contained reproduction.
+    validations:
+      required: true
