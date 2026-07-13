@@ -47,7 +47,7 @@ $sis = new Sis($profile);                 // grammar, check characters, and life
 Hosted at **<https://opensource.simtabi.com/documentation/simtabi/sis-sdk/>**.
 
 ### Guides
-- [Installation](docs/installation.md), [Getting started](docs/getting-started.md), [Configuration & profiles](docs/configuration.md), [Architecture](docs/architecture.md)
+- [Installation](docs/installation.md), [Getting started](docs/getting-started.md), [Configuration & profiles](docs/configuration.md), [Architecture](docs/architecture.md), [Release](docs/release.md)
 
 ### Reference
 - [The class register](docs/tools/register.md) · [Check characters](docs/tools/check-characters.md) · [Aliases](docs/tools/aliases.md) · [Profiles](docs/tools/profiles.md)
