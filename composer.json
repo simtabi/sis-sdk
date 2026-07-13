@@ -17,7 +17,7 @@
         "php": "^8.5"
     },
     "require-dev": {
-        "deptrac/deptrac": "^3.0",
+        "deptrac/deptrac": "^3.0 || ^4.0",
         "laravel/pint": "^1.18",
         "php-parallel-lint/php-parallel-lint": "^1.4",
         "phpstan/phpstan": "^2.0",
